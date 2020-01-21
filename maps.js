@@ -7,10 +7,20 @@ function initMap(){
     center: miUbicacion
   });
 
+/*agregando marker cuando se inicia el mapa (si no tuvieramos un metodo)
   var marker = new google.maps.Marker({
      position: miUbicacion, //objeto con mis coordenadas
      map: map, //el mapa en uso
      title: 'Aqui estoy' //msj marker
    });
+*/
+//agregando marker cuando se inicia el mapa (invocando funcion)
+addMarker(miUbicacion,map);
+
+//esta funcionalidad agrega un marker una vez el usuario clickea el mapa
+   google.maps.event.addListener(map, 'click', function(event) {
+          addMarker(event.latLng, map);//agrega el marker en el mapa mendiante un callback
+        });
+
 
 }
