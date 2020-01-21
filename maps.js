@@ -29,7 +29,7 @@ function initMap() {
 
 function addMarker(location, map) { //función para agregar marker al mapa
   var marker = new google.maps.Marker({
-    position: loation,
+    position: location,
     map: map
   });
 }
