@@ -1,3 +1,8 @@
+//VARIABLE GLOBALES
+var map; //representa el mapa
+var arregloMarkers = []; //almacena los markers de esta practica
+
+
 //FUNCION PARA INICIALIZAR EL MAPA
 function initMap() {
   miUbicacion = {
@@ -5,7 +10,7 @@ function initMap() {
     lng: -101.35449640000002
   } //objeto para especificar mi ubicacion
   //manipulacion del DOM para mostrar el mapa
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12, //nivel de zoom
     center: miUbicacion
   });
@@ -27,9 +32,13 @@ function initMap() {
 
 }
 
-function addMarker(location, map) { //función para agregar marker al mapa
+
+//FUNCION PARA AGREGAR MARCADORES AL MAPA
+function addMarker(location, map) {
   var marker = new google.maps.Marker({
-    position: location,
-    map: map
+    position: location, //posicion del marker
+    map: map //en el mapa en uso
   });
+  arregloMarkers.push(marker); //agregamos los markers a un arreglo para poder manipularlos posteriormente
+  console.log("longitud del arreglo contenedor de markers: ", arregloMarkers.length);
 }
