@@ -6,6 +6,8 @@ var id = 0; //representa un id autoincrementable para cada marker
 
 //FUNCION PARA INICIALIZAR EL MAPA
 function initMap() {
+  var inputOrigen = document.getElementById('idOrigen');//representa la ruta x
+  var inputDestino = document.getElementById('idDestino');//representa la ruta y
   miUbicacion = {
     lat: 20.6786652,
     lng: -101.35449640000002
@@ -38,6 +40,17 @@ function initMap() {
     })
 
   });
+
+
+  //FUNCION PARA AUTOCOMPLETAR EL INPUT DE ORIGEN
+  var autocompleteOrigen = new google.maps.places.Autocomplete(inputOrigen);
+  autocompleteOrigen.bindTo('bounds', map);//restringe los resultados del input
+  autocompleteOrigen.setFields(['address_components', 'geometry', 'icon', 'name']);//establece los campos que se van a ver en los detalles del lugar
+  //FUNCION PARA AUTOCOMPLETAR EL INPUT DE DESTINO
+  var autocompleteDestino = new google.maps.places.Autocomplete(inputDestino);
+  autocompleteDestino.bindTo('bounds', map);//restringe los resultados del input
+  autocompleteDestino.setFields(['address_components', 'geometry', 'icon', 'name']);//establece los campos que se van a ver en los detalles del lugar
+
 }
 
 
