@@ -6,7 +6,7 @@ var id = 0; //representa un id autoincrementable para cada marker
 var inputOrigen = document.getElementById('idOrigen');//representa la ruta x
 var inputDestino = document.getElementById('idDestino');//representa la ruta y
 var pos;//representa la posición actual
-
+var selectTransporte = document.getElementById('mode');
 
 
 //INICIO - FUNCION PARA INICIALIZAR EL MAPA
@@ -39,6 +39,8 @@ function initMap() {
   //invocamos la funcion onChangeHandler al momento de detectar un cambio en los inputs
   inputOrigen.addEventListener('change', onChangeHandler);
   inputDestino.addEventListener('change', onChangeHandler);
+  selectTransporte.addEventListener('change', onChangeHandler);
+
 
   //esta funcionalidad ejecuta una accion  una vez el usuario clickea el mapa
   google.maps.event.addListener(map, 'click', function(event) {
@@ -85,13 +87,13 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     console.log("No todos los inputs estan llenos");
     return;
   }
-  var selectedMode = document.getElementById('mode').value;
+
   directionsService.route(
     {
       //recibimos las propiedades necesarias para que pueda trazar la ruta
       origin: {query: inputOrigen.value},
       destination: {query: inputDestino.value},
-      travelMode: selectedMode
+      travelMode: selectTransporte.value
     },
     (response, status) => {
       if (status === 'OK') {
