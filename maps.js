@@ -5,6 +5,7 @@ var marker;
 var id = 0; //representa un id autoincrementable para cada marker
 var inputOrigen = document.getElementById('idOrigen');//representa la ruta x
 var inputDestino = document.getElementById('idDestino');//representa la ruta y
+var pos;//representa la posición actual
 
 
 
@@ -44,7 +45,6 @@ function initMap() {
     addMarker(event.latLng, map); //invocamos la funcion de agregar marker
   });
 
-  seleccionarUbicacion();
 }//FIN - FUNCION PARA INICIALIZAR EL MAPA
 
 
@@ -86,34 +86,38 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     return;
   }
 
-   directionsService.route(
-  {
-    //recibimos las propiedades necesarias para que pueda trazar la ruta
-     origin: {query: inputOrigen.value},
-     destination: {query: inputDestino.value},
-     travelMode: 'DRIVING'
-   },
-   (response, status) => {
-     if (status === 'OK') {
-       directionsRenderer.setDirections(response);
-     } else {
-       window.alert('No se pudo generar la ruta: ' + status);
-     }
-   });
- }
+  directionsService.route(
+    {
+      //recibimos las propiedades necesarias para que pueda trazar la ruta
+      origin: {query: inputOrigen.value},
+      destination: {query: inputDestino.value},
+      travelMode: 'DRIVING'
+    },
+    (response, status) => {
+      if (status === 'OK') {
+        directionsRenderer.setDirections(response);
+      } else {
+        window.alert('No se pudo generar la ruta: ' + status);
+      }
+    });
+  }
 
 
-//FUNCION PARA MOSTRAR UN CUADRADO CON EL OBJETIVO DE SELECCIONAR UN AREA DEL MAPA
-function seleccionarUbicacion(){
-  //limites del area del cuadrado
-  console.log("generando cuadrado");
-  var bounds = {
-          north: 40.599,
-          south: 40.490,
-          east: -70.443,
-          west: -70.649
+  //FUNCION PARA MOSTRAR UN CUADRADO CON EL OBJETIVO DE SELECCIONAR UN AREA DEL MAPA
+  function seleccionarUbicacion(){
+    if (navigator.geolocation) {
+      /*obtenemos nuestra ubicacion mediante la API de maps
+      y almacenamos la actual posicion en el objeto pos*/
+      navigator.geolocation.getCurrentPosition(function(position) {
+        console.log("activando geolocalizacion: ",position);
+        pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
         };
-
+        map.setCenter(pos);//centramos el mapa en la actual posicion
+        //limites del area del cuadrado
+        var bounds = new google.maps.LatLngBounds(pos);
+        console.log(bounds);
         //creamos el cuadrado
         var rectangle = new google.maps.Rectangle({
           bounds: bounds,
@@ -122,32 +126,34 @@ function seleccionarUbicacion(){
         });
         //pintamos el cuadrado en el mapa
         rectangle.setMap(map);
-
-}
-
-
-//FUNCION PARA ACTIVAMOS GEOLOCALIZACION EN EL NAVEGADOR
-function activarGeolocalizacion(){
-  if (navigator.geolocation) {
-    /*obtenemos nuestra ubicacion mediante la API de maps
-    y almacenamos la actual posicion en el objeto pos*/
-    navigator.geolocation.getCurrentPosition(function(position) {
-      console.log("activando geolocalizacion: ",position);
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      map.setCenter(pos);//centramos el mapa en la actual posicion
-    });
-  }else {
-    alert("tu navegador no soporta geolocalizacion");
+      });
+    }else {
+      alert("tu navegador no soporta geolocalizacion");
+    }
   }
 
-}
+
+  //FUNCION PARA ACTIVAMOS GEOLOCALIZACION EN EL NAVEGADOR
+  function activarGeolocalizacion(){
+    if (navigator.geolocation) {
+      /*obtenemos nuestra ubicacion mediante la API de maps
+      y almacenamos la actual posicion en el objeto pos*/
+      navigator.geolocation.getCurrentPosition(function(position) {
+        console.log("activando geolocalizacion: ",position);
+        pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        map.setCenter(pos);//centramos el mapa en la actual posicion
+      });
+    }else {
+      alert("tu navegador no soporta geolocalizacion");
+    }
+  }
 
 
-//FUNCION PARA REMOVER MARKERS
-function removerUltimoMarker(){
-  arregloMarkers[arregloMarkers.length-1].setMap(null); //ocultamos del mapa el ultimo marker generado
-  arregloMarkers.pop(); //extraemos mediante un pop el ultimo elemento del arreglo
-}
+  //FUNCION PARA REMOVER MARKERS
+  function removerUltimoMarker(){
+    arregloMarkers[arregloMarkers.length-1].setMap(null); //ocultamos del mapa el ultimo marker generado
+    arregloMarkers.pop(); //extraemos mediante un pop el ultimo elemento del arreglo
+  }
