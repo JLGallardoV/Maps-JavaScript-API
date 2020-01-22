@@ -109,18 +109,22 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
       /*obtenemos nuestra ubicacion mediante la API de maps
       y almacenamos la actual posicion en el objeto pos*/
       navigator.geolocation.getCurrentPosition(function(position) {
-        console.log("activando geolocalizacion: ",position);
         pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
         map.setCenter(pos);//centramos el mapa en la actual posicion
         //limites del area del cuadrado
-        var bounds = new google.maps.LatLngBounds(pos);
-        console.log(bounds);
+        var bounds = new google.maps.LatLngBounds(pos); //usamos la clase LatLngBounds y pasamos como parametro en su constructor nuestra posicion para poder ubicar el cuadrado en nuestra posicion
+
         //creamos el cuadrado
         var rectangle = new google.maps.Rectangle({
-          bounds: bounds,
+          bounds: {
+            north: bounds.pa.h,
+            south:bounds.pa.g + .01, //sumamos una centesima al sur para alargar el cuadrado y tenga forma
+            east:bounds.ka.h + .01, //sumamos una centesima al este para alargar el cuadrado y tenga forma
+            west:bounds.ka.g
+          },
           editable: true,
           draggable: true
         });
