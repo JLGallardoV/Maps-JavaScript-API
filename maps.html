@@ -10,38 +10,45 @@
   <div class="w3-container">
     <div class="w3-row">
       <div class="w3-col m6">
-
         <!-- EN ESTA PARTE DE RENDERIZA EL MAPA -->
         <div id="map" style="padding: 143px; border-radius: 6px;margin: 20px;"></div>
-
       </div>
       <div class="w3-col m6">
-      <div style="background-color:#f3f3f3;padding: 30px;margin:20px">
-        <form class="" action="index.html" method="post">
+        <div style="background-color:#f3f3f3;padding: 30px;margin:20px">
+          <form class="" action="index.html" method="post">
+            <div class="w3-row">
+              <div class="w3-col m6">
+                <input id="idOrigen" type="text"  placeholder="origen">
+              </div>
+              <div class="w3-col m6">
+                <input id="idDestino" type="text"  placeholder="destino">
+              </div>
+            </div>
+          </form>
           <div class="w3-row">
-            <div class="w3-col m6">
-              <input id="idOrigen" type="text"  placeholder="origen">
+            <div class="w3-col m6" style="margin-top: 30px;">
+              <button class="w3-button w3-blue-grey" onclick="removerUltimoMarker()">Eliminar último marker</button>
             </div>
-            <div class="w3-col m6">
-              <input id="idDestino" type="text"  placeholder="destino">
+            <div class="w3-col m6" style="margin-top: 30px;">
+              <button class="w3-button w3-blue-grey" style="width: 208px;" onclick="activarGeolocalizacion()">Mi ubicación</button>
             </div>
           </div>
-        </form>
-        <div class="w3-row">
-          <div class="w3-col m6" style="margin-top: 30px;">
-            <button class="w3-button w3-blue-grey" onclick="removerUltimoMarker()">Eliminar último marker</button>
-          </div>
-          <div class="w3-col m6" style="margin-top: 30px;">
-            <button class="w3-button w3-blue-grey" style="width: 208px;" onclick="activarGeolocalizacion()">Mi ubicación</button>
-          </div>
-          <div class="w3-col m6" style="margin-top: 30px;margin-left:135px;">
-            <button class="w3-button w3-blue-grey" style="width: 208px;" onclick="seleccionarUbicacion()">Seleccionar area</button>
+          <div class="w3-row">
+            <div class="w3-col m6" style="margin-top: 30px;">
+              <button class="w3-button w3-blue-grey" style="width: 208px;" onclick="seleccionarUbicacion()">Seleccionar area</button>
+            </div>
+            <div class="w3-col m6" style="margin-top: 30px;">
+              <select id="mode" style="width: 208px;height: 37px;">
+                <option value="DRIVING">Driving</option>
+                <option value="WALKING">Walking</option>
+                <option value="BICYCLING">Bicycling</option>
+                <option value="TRANSIT">Transit</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
-      </div>
     </div>
-
   </div>
 
   <!-- FORMULARIO BASICO  PARA ENCONTRAR UNA RUTA DE UN PUNTO x A UN PUNTO y-->

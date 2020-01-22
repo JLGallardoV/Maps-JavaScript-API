@@ -85,13 +85,13 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     console.log("No todos los inputs estan llenos");
     return;
   }
-
+  var selectedMode = document.getElementById('mode').value;
   directionsService.route(
     {
       //recibimos las propiedades necesarias para que pueda trazar la ruta
       origin: {query: inputOrigen.value},
       destination: {query: inputDestino.value},
-      travelMode: 'DRIVING'
+      travelMode: selectedMode
     },
     (response, status) => {
       if (status === 'OK') {
