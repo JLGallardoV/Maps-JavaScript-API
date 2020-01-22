@@ -8,7 +8,7 @@ var inputDestino = document.getElementById('idDestino');//representa la ruta y
 
 
 
-//FUNCION PARA INICIALIZAR EL MAPA
+//INICIO - FUNCION PARA INICIALIZAR EL MAPA
 function initMap() {
   var directionsService = new google.maps.DirectionsService;
   var directionsDisplay = new google.maps.DirectionsRenderer;
@@ -23,19 +23,11 @@ function initMap() {
     center: miUbicacion
   });
 
-  /*agregando marker cuando se inicia el mapa (si no tuvieramos un metodo)
-    var marker = new google.maps.Marker({
-       position: miUbicacion, //objeto con mis coordenadas
-       map: map, //el mapa en uso
-       title: 'Aqui estoy' //msj marker
-     });
-  */
-
   //agregando marker cuando se inicia el mapa (invocando funcion)
   addMarker(miUbicacion, map);
   //autocompletando inputs (invocando funcion)
   autocompletarInputs();
-
+  //en su momento permite que se muestre la ruta entre el punto a y el punto b
   directionsDisplay.setMap(map);
 
   //FUNCION PARA DETECTAR Y MANIPULAR LOS CAMBIOS HECHOS POR LA FUNCION INVOCADA EN LOS INPUTS
@@ -43,6 +35,7 @@ function initMap() {
     console.log("hola");
     calculateAndDisplayRoute(directionsService, directionsDisplay);
   }
+
   //invocamos la funcion onChangeHandler al momento de detectar un cambio en los inputs
   inputOrigen.addEventListener('change', onChangeHandler);
   inputDestino.addEventListener('change', onChangeHandler);
@@ -57,10 +50,7 @@ function initMap() {
       arregloMarkers.pop(); //extraemos mediante un pop el ultimo elemento del arreglo
     })
   });
-
-
-
-}
+}//FIN - FUNCION PARA INICIALIZAR EL MAPA
 
 
 //FUNCION PARA AGREGAR MARCADORES AL MAPA
@@ -75,7 +65,6 @@ function addMarker(location, map) {
   arregloMarkers.push(marker); //agregamos los markers a un arreglo para poder manipularlos posteriormente
   console.log("longitud del arreglo contenedor de markers: ", arregloMarkers.length);
 }
-
 
 
 //FUNCION PARA AUTOCOMPLETAR LOS INPUTS
@@ -94,12 +83,12 @@ function autocompletarInputs(){
 
 //FUNCION PARA TRAZAR UNA RUTA SEGUN UN PUNTO x Y UN PUNTO y
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-  console.log("entro a la funcion");
+  console.log("direccion: ",directionsService,"\n ruta: ",directionsDisplay);
    directionsService.route(
   {
     //recibimos las propiedades necesarias para que pueda trazar la ruta
-     origin: inputOrigen,
-     destination: inputDestino,
+     origin: inputOrigen.value,
+     destination: inputDestino.value,
      travelMode: 'DRIVING'
    },
    (response, status) => {
