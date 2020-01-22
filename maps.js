@@ -10,8 +10,8 @@ var inputDestino = document.getElementById('idDestino');//representa la ruta y
 
 //INICIO - FUNCION PARA INICIALIZAR EL MAPA
 function initMap() {
-  var directionsService = new google.maps.DirectionsService;
-  var directionsDisplay = new google.maps.DirectionsRenderer;
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRenderer = new google.maps.DirectionsRenderer();
 
   miUbicacion = {
     lat: 20.6786652,
@@ -28,12 +28,11 @@ function initMap() {
   //autocompletando inputs (invocando funcion)
   autocompletarInputs();
   //en su momento permite que se muestre la ruta entre el punto a y el punto b
-  directionsDisplay.setMap(map);
+  directionsRenderer.setMap(map);
 
   //FUNCION PARA DETECTAR Y MANIPULAR LOS CAMBIOS HECHOS POR LA FUNCION INVOCADA EN LOS INPUTS
   var onChangeHandler = function() {
-    console.log("hola");
-    calculateAndDisplayRoute(directionsService, directionsDisplay);
+    calculateAndDisplayRoute(directionsService, directionsRenderer);
   }
 
   //invocamos la funcion onChangeHandler al momento de detectar un cambio en los inputs
@@ -82,21 +81,27 @@ function autocompletarInputs(){
 
 
 //FUNCION PARA TRAZAR UNA RUTA SEGUN UN PUNTO x Y UN PUNTO y
-function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-  console.log("direccion: ",directionsService,"\n ruta: ",directionsDisplay);
+function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+  /*con este condicional evitaremos que cuando se ejecute esta funcion mande
+  un input sin valor y mande un error en la consola por localizacion no especificada */
+  if (inputOrigen.value == "" || inputDestino.value == "") {
+    console.log("No todos los inputs estan llenos");
+    return;
+  }
+
    directionsService.route(
   {
     //recibimos las propiedades necesarias para que pueda trazar la ruta
-     origin: inputOrigen.value,
-     destination: inputDestino.value,
+     origin: {query: inputOrigen.value},
+     destination: {query: inputDestino.value},
      travelMode: 'DRIVING'
    },
    (response, status) => {
      console.log("respuesta: ",response,"\n status: ",status);
      if (status === 'OK') {
-       directionsDisplay.setDirections(response);
-     } /*else {
-       window.alert('Directions request failed due to ' + status);
-     }*///CORREGIR ESTO, EL COMENTARIO ES TEMPORAL
+       directionsRenderer.setDirections(response);
+     } else {
+       window.alert('No se pudo generar la ruta: ' + status);
+     }
    });
  }
